@@ -135,9 +135,11 @@ jobs:
            SHORT_SHA: ${{ github.sha }}
         run: |
           SHORT_TAG=${SHORT_SHA::7}
-          IMAGE=${{secrets.AZURE_CONTAINER_REGISTRY}}/frontend:${SHORT_TAG}
+          IMAGE=${{ secrets.AZURE_CONTAINER_REGISTRY }}/frontend:${SHORT_TAG}
           docker build -t $IMAGE ./frontend/
           docker push $IMAGE
+          docker tag $IMAGE ${{ secrets.AZURE_CONATINER_REGISTRY }}/frontend:latest
+          docker push ${{ secrets.AZURE_CONATINER_REGISTRY }}/frontend:latest
       - name: Logout Azure
         if: always()
         run: az logout

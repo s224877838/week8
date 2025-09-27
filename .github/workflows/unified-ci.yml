@@ -131,10 +131,13 @@ jobs:
       - name: Login to Azure Container Registry
         run: az acr login --name ${{ env.ACR_LOGIN_SERVER }}
       - name: Build & Push Frontend
+        env:
+           SHORT_SHA: ${{ github.sha }}
         run: |
-          TAG=${{ github.ref_name == 'main' && 'latest' || format('dev-{0}', github.sha) }}
-          docker build -t ${{ env.ACR_LOGIN_SERVER }}/frontend:$TAG ./frontend
-          docker push ${{ env.ACR_LOGIN_SERVER }}/frontend:$TAG
+          SHORT_TAG=${SHORT_SHA::7}
+          IMAGE=${{secrets.AZURE_CONTAINER_REGISTRY}}/frontend:${SHORT_TAG}
+          docker build -t $IMAGE ./frontend/
+          docker push $IMAGE
       - name: Logout Azure
         if: always()
         run: az logout

@@ -82,7 +82,7 @@ jobs:
             sleep 5
           done
           if [[ -z "$PRODUCT_IP" || -z "$ORDER_IP" ]]; then
-            echo "❌ Failed to get backend IPs"
+            echo " Failed to get backend IPs"
             exit 1
           fi
 
